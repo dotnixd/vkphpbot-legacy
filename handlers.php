@@ -1,6 +1,7 @@
 <?php
 
 require_once("utils.php");
+require_once("Field_calculate.php");
 require_once("smeh.php");
 
 class Handlers {
@@ -49,7 +50,8 @@ class Handlers {
 :: !кончил - кончить на пикчу (нужно приложить пикчу)
 :: !документ <название> - поиск документов ВК
 :: !огорчило - приклеить наклеку \"огорчило\" (нужно прикрепить пикчу)
-:: !смех - генератор смеха (для справки напишите \"!смех -h\")", $peer_id);
+:: !смех - генератор смеха (для справки напишите \"!смех -h\")
+:: !калькулятор (пример) - вычислить ответ примера", $peer_id);
             break;
             case "!кто":
                 $users = $this->vk->GetDialogMembers($peer_id);
@@ -349,11 +351,21 @@ class Handlers {
                 $smeh = new Smeh($f);
                 $smeh->Parse();
                 if($smeh->GetCount() > 2000) {
-                    $this->vk->SendMessage(":: Слишком большое число -c");
+                    $this->vk->SendMessage(":: Слишком большое число -c", $peer_id);
                     return;
                 } 
 
                 $this->vk->SendMessage($smeh->Generate(), $peer_id);
+            break;
+            case "!калькулятор":
+                $msg = $this->ArrayToString($f, $peer_id);
+                if(count($msg) > 2000) {
+                    $this->vk->SendMessage(":: Слишком длинный пример", $peer_id);
+                    return;
+                }
+
+                $calc = new Field_calculate();
+                $this->vk->SendMessage(":: Результат:\n" . $calc->calculate($msg), $peer_id);
             break;
         }
 
