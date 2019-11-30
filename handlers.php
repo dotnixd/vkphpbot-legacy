@@ -1,6 +1,7 @@
 <?php
 
 require_once("utils.php");
+require_once("smeh.php");
 
 class Handlers {
     private $vk;
@@ -46,7 +47,9 @@ class Handlers {
 :: !приветствие <сообщение> - установить приветствие
 :: !роль - получить роль
 :: !кончил - кончить на пикчу (нужно приложить пикчу)
-:: !документ <название> - поиск документов ВК", $peer_id);
+:: !документ <название> - поиск документов ВК
+:: !огорчило - приклеить наклеку \"огорчило\" (нужно прикрепить пикчу)
+:: !смех - генератор смеха (для справки напишите \"!смех -h\")", $peer_id);
             break;
             case "!кто":
                 $users = $this->vk->GetDialogMembers($peer_id);
@@ -341,6 +344,16 @@ class Handlers {
                 $attach = "doc" . $video->response->items[0]->owner_id . "_" . $video->response->items[0]->id;
 
                 $this->vk->SendMessage(":: Ваш документ", $peer_id, $attach);
+            break;
+            case "!смех":
+                $smeh = new Smeh($f);
+                $smeh->Parse();
+                if($smeh->GetCount() > 2000) {
+                    $this->vk->SendMessage(":: Слишком большое число -c");
+                    return;
+                } 
+
+                $this->vk->SendMessage($smeh->Generate(), $peer_id);
             break;
         }
 
