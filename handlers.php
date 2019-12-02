@@ -27,13 +27,13 @@ class Handlers {
             return;
         }
 
-        switch($f[0]) {
-            case "/жив?":
-            case "!пинг":
+        switch(\substr($f[0], 1)) {
+            case "жив?":
+            case "пинг":
                 $this->vk->SendMessage(":: Понг\nБот работает", $peer_id);
             break;
-            case "!хелп":
-            case "!помощь":
+            case "хелп":
+            case "помощь":
                 $this->vk->SendMessage(":: !помощь (!хелп) - получить помощь
 :: !пинг - проверить работоспособность бота
 :: !кто <что-нибудь> - выберет случайного участика беседы
@@ -53,7 +53,7 @@ class Handlers {
 :: !смех - генератор смеха (для справки напишите \"!смех -h\")
 :: !калькулятор (пример) - вычислить ответ примера", $peer_id);
             break;
-            case "!кто":
+            case "кто":
                 $users = $this->vk->GetDialogMembers($peer_id);
                 if($users->error->error_code) {
                     $this->vk->SendMessage(":: Произошла ошибка: " . $users->error->error_msg, $peer_id);
@@ -67,7 +67,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: Кто" . $who . "? Возможно это [id" . $users->response->profiles[$k]->id . "|" . $name . "]", $peer_id);
             break;
-            case "!выбери":
+            case "выбери":
                 $str = "";
                 $chooses = array();
 
@@ -88,11 +88,11 @@ class Handlers {
                 $k = rand() % count($chooses);
                 $this->vk->SendMessage(":: Выбрано:" . $chooses[$k], $peer_id);
             break;
-            case "!вероятность":
+            case "вероятность":
                 $msg = $this->ArrayToString($f, $peer_id);
                 $this->vk->SendMessage(":: Вероятность того, что" . $msg . " составляет " . strval(rand() % 100) . "%", $peer_id);
             break;
-            case "!пуш":
+            case "пуш":
                 $msg = "";
 
                 for($i = 1; $i < count($f); $i++) {
@@ -116,7 +116,7 @@ class Handlers {
                     "message" => ":: [id" . $user_id . "|" . $this->vk->GetFirstName($user_id) . "] хочет сделать объявление:" . $msg . $mention
                 ));
             break;
-            case "!перевод":
+            case "перевод":
                 $msg = $this->ArrayToString($f);
 
                 $lang = json_decode( $this->vk->Post("https://translate.yandex.net/api/v1.5/tr.json/detect", array(
@@ -138,7 +138,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: Перевод\n" . $trans->text[0], $peer_id);
             break;
-            case "!онлайн":
+            case "онлайн":
                 $users = $this->vk->GetDialogMembers($peer_id);
                 if($users->error->error_code) {
                     $this->vk->SendMessage(":: Произошла ошибка: " . $users->error->error_msg, $peer_id);
@@ -155,7 +155,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: Участники онлайн" . $online, $peer_id);
             break;
-            case "!оффлайн":
+            case "оффлайн":
                 $users = $this->vk->GetDialogMembers($peer_id);
                 if($users->error->error_code) {
                     $this->vk->SendMessage(":: Произошла ошибка: " . $users->error->error_msg, $peer_id);
@@ -172,7 +172,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: Участники оффлайн" . $online, $peer_id);
             break;
-            case "!погода":
+            case "погода":
                 $msg = $this->ArrayToString($f, $peer_id);
 
                 $trans = json_decode( $this->vk->Post("https://translate.yandex.net/api/v1.5/tr.json/translate", array(
@@ -218,7 +218,7 @@ class Handlers {
                 "°C\n- Влажность: " . strval($humidity) . 
                 "%\n- Скорость ветра: " . strval($windspeed) . "м/с", $peer_id);
             break;
-            case "!тимкук":
+            case "тимкук":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
                         $this->u->Download($a->photo->sizes[count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
@@ -245,7 +245,7 @@ class Handlers {
                 unlink("pics/vk.jpg");
                 unlink("pics/pic.png");
             break;
-            case "!огорчило":
+            case "огорчило":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
                         $this->u->Download($a->photo->sizes[count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
@@ -271,7 +271,7 @@ class Handlers {
                 unlink("pics/vk.jpg");
                 unlink("pics/pic.png");
             break;
-            case "!кончил":
+            case "кончил":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
                         $this->u->Download($a->photo->sizes[count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
@@ -298,7 +298,7 @@ class Handlers {
                 unlink("pics/vk.jpg");
                 unlink("pics/pic.png");
             break;
-            case "!приветствие":
+            case "приветствие":
                 $msg = $this->ArrayToString($f, $peer_id);
                 
                 $this->vk->SendMessage(":: Приветствие изменено", $peer_id);
@@ -306,7 +306,7 @@ class Handlers {
                 $ok = $this->db->GetConn()->prepare("UPDATE dialogs SET greeting=? WHERE peer_id=?");
                 $ok->execute(array($msg, $peer_id)); 
             break;
-            case "!роль":
+            case "роль":
                 $role = $this->u->GetRole($peer_id, $user_id);
                 $role_s = "";
 
@@ -326,7 +326,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: " . $this->GetMention($user_id) . ", ваша роль: ". $role_s, $peer_id);
             break;
-            case "!сетроль":
+            case "сетроль":
                 if(len($f) < 3) {
                     $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
                     return;
@@ -334,7 +334,7 @@ class Handlers {
 
                 $role = 0;
             break;
-            case "!документ":
+            case "документ":
                 $msg = $this->ArrayToString($f, $peer_id);
                 $video = json_decode( $this->vk->Request("docs.search", array("q" => $msg, "count" => 1)) );
 
@@ -347,7 +347,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: Ваш документ", $peer_id, $attach);
             break;
-            case "!смех":
+            case "смех":
                 $smeh = new Smeh($f);
                 $smeh->Parse();
                 if($smeh->GetCount() > 2000) {
@@ -357,7 +357,7 @@ class Handlers {
 
                 $this->vk->SendMessage($smeh->Generate(), $peer_id);
             break;
-            case "!калькулятор":
+            case "калькулятор":
                 $msg = $this->ArrayToString($f, $peer_id);
                 if(count($msg) > 2000) {
                     $this->vk->SendMessage(":: Слишком длинный пример", $peer_id);
