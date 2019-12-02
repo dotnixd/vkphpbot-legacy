@@ -20,7 +20,7 @@ class Handlers {
         $peer_id = $data->object->peer_id;
         $user_id = $data->object->from_id;
         $action = $data->object->action;
-        $f = explode(" ", $text);
+        $f = \explode(" ", $text);
 
         if($data->object->id) {
             $this->vk->SendMessage(":: Бота нельзя использовать в личных сообщениях (пока что)", $peer_id);
@@ -51,7 +51,9 @@ class Handlers {
 :: !документ <название> - поиск документов ВК
 :: !огорчило - приклеить наклеку \"огорчило\" (нужно прикрепить пикчу)
 :: !смех - генератор смеха (для справки напишите \"!смех -h\")
-:: !калькулятор (пример) - вычислить ответ примера", $peer_id);
+:: !калькулятор (пример) - вычислить ответ примера
+
+Репозиторий на GitHub - https://github.com/OverPie/vkphpbot", $peer_id);
             break;
             case "кто":
                 $users = $this->vk->GetDialogMembers($peer_id);
@@ -62,7 +64,7 @@ class Handlers {
 
                 $who = $this->ArrayToString($f, $peer_id);
 
-                $k = rand() % count($users->response->profiles);
+                $k = \rand() % \count($users->response->profiles);
                 $name = $users->response->profiles[$k]->first_name . " " . $users->response->profiles[$k]->last_name;
 
                 $this->vk->SendMessage(":: Кто" . $who . "? Возможно это [id" . $users->response->profiles[$k]->id . "|" . $name . "]", $peer_id);
@@ -71,12 +73,12 @@ class Handlers {
                 $str = "";
                 $chooses = array();
 
-                if(count($f) == 1) {
+                if(\count($f) == 1) {
                     $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
                     return;
                 }
 
-                for($i = 1; $i < count($f); $i++) {
+                for($i = 1; $i < \count($f); $i++) {
                     if($f[$i] == "или") {
                         array_push($chooses, $str);
                         $str = "";
@@ -85,17 +87,17 @@ class Handlers {
                     }
                 }
 
-                $k = rand() % count($chooses);
+                $k = \rand() % \count($chooses);
                 $this->vk->SendMessage(":: Выбрано:" . $chooses[$k], $peer_id);
             break;
             case "вероятность":
                 $msg = $this->ArrayToString($f, $peer_id);
-                $this->vk->SendMessage(":: Вероятность того, что" . $msg . " составляет " . strval(rand() % 100) . "%", $peer_id);
+                $this->vk->SendMessage(":: Вероятность того, что" . $msg . " составляет " . strval(\rand() % 100) . "%", $peer_id);
             break;
             case "пуш":
                 $msg = "";
 
-                for($i = 1; $i < count($f); $i++) {
+                for($i = 1; $i < \count($f); $i++) {
                     $msg .= " " . $f[$i];
                 }
 
@@ -112,7 +114,7 @@ class Handlers {
 
                 $this->vk->Request("messages.send", array(
                     "peer_id" => $peer_id,
-                    "random_id" => 0,
+                    "\random_id" => 0,
                     "message" => ":: [id" . $user_id . "|" . $this->vk->GetFirstName($user_id) . "] хочет сделать объявление:" . $msg . $mention
                 ));
             break;
@@ -221,7 +223,7 @@ class Handlers {
             case "тимкук":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
-                        $this->u->Download($a->photo->sizes[count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
+                        $this->u->Download($a->photo->sizes[\count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
                     }
                 }
  
@@ -248,7 +250,7 @@ class Handlers {
             case "огорчило":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
-                        $this->u->Download($a->photo->sizes[count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
+                        $this->u->Download($a->photo->sizes[\count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
                     }
                 }
 
@@ -274,7 +276,7 @@ class Handlers {
             case "кончил":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
-                        $this->u->Download($a->photo->sizes[count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
+                        $this->u->Download($a->photo->sizes[\count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
                     }
                 }
 
@@ -359,7 +361,7 @@ class Handlers {
             break;
             case "калькулятор":
                 $msg = $this->ArrayToString($f, $peer_id);
-                if(count($msg) > 2000) {
+                if(\count($msg) > 2000) {
                     $this->vk->SendMessage(":: Слишком длинный пример", $peer_id);
                     return;
                 }
@@ -403,7 +405,7 @@ class Handlers {
     }
 
     public function ArrayToString($f, $peer_id) {
-        if(count($f) == 1) {
+        if(\count($f) == 1) {
             $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
             echo "ok";
             exit();
@@ -411,7 +413,7 @@ class Handlers {
 
         $msg = "";
 
-        for($i = 1; $i < count($f); $i++) {
+        for($i = 1; $i < \count($f); $i++) {
             $msg .= " " . $f[$i];
         }
 
