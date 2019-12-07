@@ -114,7 +114,7 @@ class Handlers {
 
                 $this->vk->Request("messages.send", array(
                     "peer_id" => $peer_id,
-                    "\random_id" => 0,
+                    "random_id" => 0,
                     "message" => ":: [id" . $user_id . "|" . $this->vk->GetFirstName($user_id) . "] хочет сделать объявление:" . $msg . $mention
                 ));
             break;
