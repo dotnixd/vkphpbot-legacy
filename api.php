@@ -8,6 +8,32 @@ class VKApi {
         $this->vk = "https://api.vk.com/method/";
     }
 
+    public function GetID($mention) {
+        $c = json_decode($this->Request("users.get", array("user_ids" => $mention)));
+        if(!($c->error->error_code)) {
+            return $c->response[0]->id;
+        }
+
+        preg_match_all('!\d+!', $mention, $matches);
+        if($matches[0][0]) {
+            $r = json_decode($this->Request("users.get", array("user_ids" => $matches[0][0])));
+            if(!($r->error->error_code)) {
+                return $r->response[0]->id;
+            }
+        }
+
+        $a = \explode("|", $mention);
+        if(len($a) == 2) {
+            $b = \str_replace("[", "", $a[0]);
+            $r = json_decode($this->Request("users.get", array("user_ids" => $b)));
+            if(!($r->error->error_code)) {
+                return $r->response[0]->id;
+            }
+        }
+
+        return FALSE;
+    }
+
     public function Post($url, $params) {
         $get_params = http_build_query($params);
 

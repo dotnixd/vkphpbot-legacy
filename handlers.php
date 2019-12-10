@@ -246,7 +246,7 @@ class Handlers {
 
                 unlink("pics/vk.jpg");
                 unlink("pics/pic.png");
-            break;
+		    break;
             case "огорчило":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
@@ -328,14 +328,6 @@ class Handlers {
 
                 $this->vk->SendMessage(":: " . $this->GetMention($user_id) . ", ваша роль: ". $role_s, $peer_id);
             break;
-            case "сетроль":
-                if(len($f) < 3) {
-                    $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
-                    return;
-                }
-
-                $role = 0;
-            break;
             case "документ":
                 $msg = $this->ArrayToString($f, $peer_id);
                 $video = json_decode( $this->vk->Request("docs.search", array("q" => $msg, "count" => 1)) );
@@ -369,12 +361,52 @@ class Handlers {
                 $calc = new Field_calculate();
                 $this->vk->SendMessage(":: Результат:\n" . $calc->calculate($msg), $peer_id);
             break;
+            case "whoa":
+                $this->vk->SendMessage($this->vk->GetID($f[1]), $peer_id);
+            break;
+            case "сетроль":
+                if(\count($f) < 3) {
+                    $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
+                    return;
+                }
+
+                if($this->u->GetRole($peer_id, $user_id) < 2) {
+                    $this->vk->SendMessage(":: У вас нет прав на использование этой команды", $peer_id);
+                    return;
+                }
+
+                $dog = $this->vk->GetID($f[1]);
+                if($dog == FALSE) {
+                    $this->vk->SendMessage(":: Такого пользователя нет", $peer_id);
+                    return;
+                }
+
+                $this->vk->SendMessage(":: Права выданы", $peer_id);
+                $r = 0;
+
+                switch($f[2]) {
+                    case "админ":
+                    case "администратор":
+                    case "а":
+                        $r = 2;
+                    break;
+                    case "модер":
+                    case "модератор":
+                    case "м":
+                        $r = 1;
+                    break;
+                }
+
+                $this->u->SetRole($peer_id, $user_id, $r);
+
+            break;
         }
 
         if($action) {
             if($action->type == "chat_invite_user") {
                 if($action->member_id == -189095114) {
                     $this->vk->SendMessage(":: /usr/bin/php приглашён в чат!", $peer_id);
+                    $this->u->SetRole($peer_id, $user_id, 2);
                     if($this->db->GetConn()->query("SELECT peer_id FROM dialogs WHERE peer_id=\"" . $peer_id . "\"")->fetch()) {
                         return;
                     }
@@ -392,7 +424,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: " . $this->GetMention($action->member_id) . "," . $ok["greeting"], $peer_id);
 
-            } elseif ($action->type = "chat_kick_user") {
+			} elseif ($action->type == "chat_kick_user") {
                 if($action->member_id == -189095114) {
                     $this->db->GetConn()->prepare("DELETE FROM dialogs WHERE peer_id=?").execute(array($peer_id));
 
