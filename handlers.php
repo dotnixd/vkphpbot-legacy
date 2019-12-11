@@ -52,6 +52,8 @@ class Handlers {
 :: !огорчило - приклеить наклеку \"огорчило\" (нужно прикрепить пикчу)
 :: !смех - генератор смеха (для справки напишите \"!смех -h\")
 :: !калькулятор (пример) - вычислить ответ примера
+:: !когда <текст> - предугадать когда произойдет что-то
+:: !чтозааниме - найти аниме по пикче (нужно прикрепить пикчу)
 
 Репозиторий на GitHub - https://github.com/OverPie/vkphpbot", $peer_id);
             break;
@@ -219,7 +221,40 @@ class Handlers {
                 "\n- Температура: " . strval($temp) . 
                 "°C\n- Влажность: " . strval($humidity) . 
                 "%\n- Скорость ветра: " . strval($windspeed) . "м/с", $peer_id);
-            break;
+		    break;
+			case "чтозааниме":
+				$url = $data->object->attachments[0]->photo->sizes[\count($data->object->attachments[0]->photo->sizes) - 1]->url;
+
+				if(!$url) {
+				    $this->vk->SendMessage(":: Нужно прикрепить пикчу", $peer_id);
+					return;
+				}
+
+				$request_params = array(
+				    "url" => $url
+				);
+
+				$anime = $this->vk->Post("https://trace.moe/api/search", $request_params);
+
+				$get_params = http_build_query($request_params);
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL, "https://trace.moe/api/search?". $get_params);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				$anime = json_decode(curl_exec($curl));
+                curl_close($curl);
+                
+            //     name = encode["docs"][0]["title_english"]
+            // episode = encode["docs"][0]["episode"]
+            // chance = round(encode['docs'][0]["similarity"] * 100)
+            // sec = round(encode["docs"][0]["from"])
+            // time = timedelta(seconds = sec)
+                $name = $anime->docs[0]->title_english;
+                $episode = $anime->docs[0]->episode;
+                $chance = round($anime->docs[0]->similarity * 100);
+                $time = gmdate("H:i:s", $anime->docs[0]->from);
+
+                $this->vk->SendMessage(":: " . $name . "\nСезон: ". $episode . "\nТочность: " . $chance . "\nВремя: " . $time, $peer_id);
+		    break;
             case "тимкук":
                 foreach($data->object->attachments as $a) {
                     if($a->type == "photo") {
@@ -307,7 +342,30 @@ class Handlers {
     
                 $ok = $this->db->GetConn()->prepare("UPDATE dialogs SET greeting=? WHERE peer_id=?");
                 $ok->execute(array($msg, $peer_id)); 
-            break;
+		    break;
+			case "когда":
+				$msg = $this->ArrayToString($f, $peer_id);
+				$when = "Через " . rand() % 1000 . " ";
+				$w = rand() % 5;
+				switch($w) {
+				case 0:
+				    $when .= "лет";
+				break;
+				case 1:
+				    $when .= "дней";
+				break;
+				case 2:
+				    $when .= "часов";
+				break;
+				case 3:
+				    $when .= "минут";
+				break;
+				default:
+					$when .= "секунд";
+				}
+
+				$this->vk->SendMessage(":: " . $when . $msg, $peer_id);
+		    break;
             case "роль":
                 $role = $this->u->GetRole($peer_id, $user_id);
                 $role_s = "";
