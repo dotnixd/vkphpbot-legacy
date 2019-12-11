@@ -242,18 +242,12 @@ class Handlers {
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 				$anime = json_decode(curl_exec($curl));
                 curl_close($curl);
-                
-            //     name = encode["docs"][0]["title_english"]
-            // episode = encode["docs"][0]["episode"]
-            // chance = round(encode['docs'][0]["similarity"] * 100)
-            // sec = round(encode["docs"][0]["from"])
-            // time = timedelta(seconds = sec)
                 $name = $anime->docs[0]->title_english;
                 $episode = $anime->docs[0]->episode;
                 $chance = round($anime->docs[0]->similarity * 100);
                 $time = gmdate("H:i:s", $anime->docs[0]->from);
 
-                $this->vk->SendMessage(":: " . $name . "\nСезон: ". $episode . "\nТочность: " . $chance . "\nВремя: " . $time, $peer_id);
+                $this->vk->SendMessage(":: " . $name . "\nСезон: ". $episode . "\nТочность: " . $chance . "%\nВремя: " . $time, $peer_id);
 		    break;
             case "тимкук":
                 foreach($data->object->attachments as $a) {
@@ -342,13 +336,13 @@ class Handlers {
     
                 $ok = $this->db->GetConn()->prepare("UPDATE dialogs SET greeting=? WHERE peer_id=?");
                 $ok->execute(array($msg, $peer_id)); 
-		    break;
-			case "когда":
-				$msg = $this->ArrayToString($f, $peer_id);
-				$when = "Через " . rand() % 1000 . " ";
-				$w = rand() % 5;
-				switch($w) {
-				case 0:
+            break;
+            case "когда":
+                $msg = $this->ArrayToString($f, $peer_id);
+                $when = "Через " . rand() % 1000 . " ";
+                $w = rand() % 5;
+                switch($w) {
+			    case 0:
 				    $when .= "лет";
 				break;
 				case 1:
