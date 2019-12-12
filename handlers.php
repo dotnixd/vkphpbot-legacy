@@ -478,8 +478,8 @@ class Handlers {
                     return;
                 }
 
-                $clown = $this->db->GetConn()->prepare("SELECT id FROM blacklist WHERE id=? AND peer_id=?");
-                $clown->execute(array($action["member_id"], $peer_id));
+                $clown = $this->db->GetConn()->prepare("SELECT id FROM blacklist WHERE id=?");
+                $clown->execute(array($action["member_id"]));
                 if($clown->rowCount() > 0) {
                     $this->vk->SendMessage(":: " . $this->GetMention($action["member_id"]) . ", вы в ЧС бота\nПока пока)))))", $peer_id);
                     $this->vk->Request("messages.removeChatUser", array(

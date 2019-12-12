@@ -16,9 +16,8 @@ class DevConsole {
     public function Run($f) {
         switch($f[1]) {
             case "вчс":
-                $this->db->GetConn()->prepare("INSERT INTO blacklist (id, peer_id) VALUES (?, ?)")->execute(array(
+                $this->db->GetConn()->prepare("INSERT INTO blacklist (id) VALUES (?)")->execute(array(
                     $this->vk->GetID($f[2]),
-                    $this->peer_id
                 ));
                 $this->vk->SendMessage($this->vk->GetID($f[2]) . " ok added", $this->peer_id);
             break;
@@ -28,9 +27,8 @@ class DevConsole {
                 while($b = $test->fetch()) $this->vk->SendMessage(var_export($b, true), $this->peer_id);
             break;
             case "изчс":
-                $this->db->GetConn()->prepare("DELETE FROM blacklist WHERE id=? AND peer_id=?")->execute(array(
+                $this->db->GetConn()->prepare("DELETE FROM blacklist WHERE id=?")->execute(array(
                     $this->vk->GetID($f[2]),
-                    $this->peer_id
                 ));
                 $this->vk->SendMessage($this->vk->GetID($f[2]) . " ok deleted", $this->peer_id);
             break;
