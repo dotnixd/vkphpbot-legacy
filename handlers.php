@@ -240,12 +240,12 @@ class Handlers {
 				$curl = curl_init();
 				curl_setopt($curl, CURLOPT_URL, "https://trace.moe/api/search?". $get_params);
 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-				$anime = json_decode(curl_exec($curl));
+				$anime = json_decode(curl_exec($curl), true);
                 curl_close($curl);
-                $name = $anime->docs[0]->title_english;
-                $episode = $anime->docs[0]->episode;
-                $chance = round($anime->docs[0]->similarity * 100);
-                $time = gmdate("H:i:s", $anime->docs[0]->from);
+                $name = $anime["docs"][0]["title_english"];
+                $episode = $anime["docs"][0]["episode"];
+                $chance = round($anime["docs"][0]["similarity"] * 100);
+                $time = gmdate("H:i:s", $anime["docs"][0]["from"]);
 
                 $this->vk->SendMessage(":: " . $name . "\nСезон: ". $episode . "\nТочность: " . $chance . "%\nВремя: " . $time, $peer_id);
 		    break;
