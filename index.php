@@ -7,7 +7,7 @@ require_once("api.php");
 require_once("sql.php");
 require_once("config.php");
 
-$data = json_decode(file_get_contents('php://input'));
+$data = json_decode(file_get_contents('php://input'), true);
 
 $db = new DB($dbhost, $dbuser, $dbpassword, $dbname);
 $db->Connect();
@@ -15,7 +15,7 @@ $db->Connect();
 $api = new VKApi($token);
 $handle = new Handlers($api, $db);
 
-switch($data->type) {
+switch($data["type"]) {
     case "confirmation":
         echo $confirmation_token;
         exit();

@@ -16,16 +16,11 @@ class Handlers {
     }
     
     public function Run($data) {
-        $text = $data->object->text;
-        $peer_id = $data->object->peer_id;
-        $user_id = $data->object->from_id;
-        $action = $data->object->action;
+        $text = $data["object"]["text"];
+        $peer_id = $data["object"]["peer_id"];
+        $user_id = $data["object"]["from_id"];
+        $action = $data["object"]["action"];
         $f = \explode(" ", $text);
-
-        if($data->object->id) {
-            $this->vk->SendMessage(":: Бота нельзя использовать в личных сообщениях (пока что)", $peer_id);
-            return;
-        }
 
         switch(\substr($f[0], 1)) {
             case "жив?":
@@ -223,7 +218,7 @@ class Handlers {
                 "%\n- Скорость ветра: " . strval($windspeed) . "м/с", $peer_id);
 		    break;
 			case "чтозааниме":
-				$url = $data->object->attachments[0]->photo->sizes[\count($data->object->attachments[0]->photo->sizes) - 1]->url;
+				$url = $data["object"]["attachments"][0]["photo"]["sizes"][\count($data["object"]["attachments"][0]["photo"]["sizes"]) - 1]["url"];
 
 				if(!$url) {
 				    $this->vk->SendMessage(":: Нужно прикрепить пикчу", $peer_id);
@@ -250,9 +245,9 @@ class Handlers {
                 $this->vk->SendMessage(":: " . $name . "\nСезон: ". $episode . "\nТочность: " . $chance . "%\nВремя: " . $time, $peer_id);
 		    break;
             case "тимкук":
-                foreach($data->object->attachments as $a) {
-                    if($a->type == "photo") {
-                        $this->u->Download($a->photo->sizes[\count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
+                foreach($data["object"]["attachments"] as $a) {
+                    if($a["type"] == "photo") {
+                        $this->u->Download($a["photo"]["sizes"][\count($a["photo"]["sizes"]) - 1]["url"], "pics/vk.jpg");
                     }
                 }
  
@@ -277,9 +272,9 @@ class Handlers {
                 unlink("pics/pic.png");
 		    break;
             case "огорчило":
-                foreach($data->object->attachments as $a) {
-                    if($a->type == "photo") {
-                        $this->u->Download($a->photo->sizes[\count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
+                foreach($data["object"]["attachments"] as $a) {
+                    if($a["type"] == "photo") {
+                        $this->u->Download($a["photo"]["sizes"][\count($a["photo"]["sizes"]) - 1]["url"], "pics/vk.jpg");
                     }
                 }
 
@@ -303,9 +298,9 @@ class Handlers {
                 unlink("pics/pic.png");
             break;
             case "кончил":
-                foreach($data->object->attachments as $a) {
-                    if($a->type == "photo") {
-                        $this->u->Download($a->photo->sizes[\count($a->photo->sizes) - 1]->url, "pics/vk.jpg");
+                foreach($data["object"]["attachments"] as $a) {
+                    if($a["type"] == "photo") {
+                        $this->u->Download($a["photo"]["sizes"][\count($a["photo"]["sizes"]) - 1]["url"], "pics/vk.jpg");
                     }
                 }
 
