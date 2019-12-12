@@ -13,7 +13,7 @@ $db = new DB($dbhost, $dbuser, $dbpassword, $dbname);
 $db->Connect();
 
 $api = new VKApi($token);
-$handle = new Handlers($api, $db);
+$handle = new Handlers($api, $db, $admins);
 
 switch($data["type"]) {
     case "confirmation":
