@@ -17,6 +17,23 @@ class Utils {
         return $query->fetch()["role"];
     }
 
+    public function SetRole($peer_id, $user_id, $role) {
+        $query = $this->db->GetConn()->prepare("SELECT role FROM role_assign WHERE user_id=? AND peer_id=?");
+        $query->execute(array($user_id, $peer_id));
+
+        if($query->rowCount() == 0) {
+            $b = $this->db->GetConn()->prepare("INSERT INTO role_assign (user_id, peer_id, role) VALUES(?, ?, ?)");
+            $b->execute(array(
+                $user_id, $peer_id, $role
+            ));
+        } else {
+            $b = $this->db->GetConn()->prepare("UPDATE role_assign SET role=? WHERE user_id=? AND peer_id=?");
+            $b->execute(array(
+                $role, $user_id, $peer_id
+            ));
+        }
+    }
+
     public function Download($url, $filename) {
         $ch = curl_init ($url);
         curl_setopt($ch, CURLOPT_HEADER, 0);

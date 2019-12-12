@@ -95,6 +95,7 @@ class Handlers {
                 $this->vk->SendMessage(":: Вероятность того, что" . $msg . " составляет " . strval(\rand() % 100) . "%", $peer_id);
             break;
             case "пуш":
+                $this->IsRoleOrDie($peer_id, $user_id, 1);
                 $msg = "";
 
                 for($i = 1; $i < \count($f); $i++) {
@@ -328,6 +329,7 @@ class Handlers {
                 unlink("pics/pic.png");
             break;
             case "приветствие":
+                $this->IsRoleOrDie($peer_id, $user_id, 1);
                 $msg = $this->ArrayToString($f, $peer_id);
                 
                 $this->vk->SendMessage(":: Приветствие изменено", $peer_id);
@@ -411,10 +413,21 @@ class Handlers {
                 $calc = new Field_calculate();
                 $this->vk->SendMessage(":: Результат:\n" . $calc->calculate($msg), $peer_id);
             break;
-            case "whoa":
-                $this->vk->SendMessage($this->vk->GetID($f[1]), $peer_id);
+            case "к":
+                $is = 0;
+                foreach($this->admins as $a) {
+                    if($this->vk->GetID($a) == $user_id) $is = 1;
+                }
+
+                if($is == 0) {
+                    return;
+                }
+                
+                $a = new DevConsole($peer_id, $user_id, $this->db, $this->vk);
+                $a->Run($f);
             break;
             case "сетроль":
+                $this->IsRoleOrDie($peer_id, $user_id, 2);
                 if(\count($f) < 3) {
                     $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
                     return;
@@ -450,19 +463,6 @@ class Handlers {
                 $this->u->SetRole($peer_id, $user_id, $r);
 
             break;
-            case "к":
-                $is = 0;
-                foreach($this->admins as $a) {
-                    if($this->vk->GetID($a) == $user_id) $is = 1;
-                }
-
-                if($is == 0) {
-                    return;
-                }
-                
-                $a = new DevConsole($peer_id, $user_id, $this->db, $this->vk);
-                $a->Run($f);
-            break;
         }
 
         if($action) {
@@ -470,6 +470,14 @@ class Handlers {
                 if($action["member_id"] == -189095114) {
                     $this->vk->SendMessage(":: /usr/bin/php приглашён в чат!", $peer_id);
                     $this->u->SetRole($peer_id, $user_id, 2);
+                    $members = $this->vk->GetDialogMembers($peer_id);
+
+                    foreach($members->response->items as $user) {
+                        if($user->is_admin || $user->is_owner) {
+                            $this->u->SetRole($peer_id, $user->member_id, 2);
+                        }
+                    }
+
                     if($this->db->GetConn()->query("SELECT peer_id FROM dialogs WHERE peer_id=\"" . $peer_id . "\"")->fetch()) {
                         return;
                     }
@@ -530,6 +538,14 @@ class Handlers {
 
     public function GetMention($user_id) {
         return "[id" . $user_id . "|" . $this->vk->GetFirstName($user_id) . "]";
+    }
+
+    public function IsRoleOrDie($peer_id, $user_id, $role) {
+        if($this->u->GetRole($peer_id, $user_id) < $role) {
+            $this->vk->SendMessage(":: Недостаточно прав для использования этой команды", $peer_id);
+            echo "ok";
+            exit();
+        }
     }
 }
 
