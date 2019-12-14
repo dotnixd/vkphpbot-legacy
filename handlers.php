@@ -4,6 +4,7 @@ require_once("utils.php");
 require_once("Field_calculate.php");
 require_once("smeh.php");
 require_once("devconsole.php");
+require_once("simple_html_dom.php");
 
 class Handlers {
     private $vk;
@@ -52,6 +53,8 @@ class Handlers {
 :: !калькулятор (пример) - вычислить ответ примера
 :: !когда <текст> - предугадать когда произойдет что-то
 :: !чтозааниме - найти аниме по пикче (нужно прикрепить пикчу)
+:: !сетроль <пользователь> <роль> - изменить роль пользователю (а/админ/админстратор, м/модер/модератор, что угодно - обычный участник)
+:: !баш - цитата с bash.im
 
 Репозиторий на GitHub - https://github.com/OverPie/vkphpbot", $peer_id);
             break;
@@ -425,16 +428,18 @@ class Handlers {
                 
                 $a = new DevConsole($peer_id, $user_id, $this->db, $this->vk);
                 $a->Run($f);
-            break;
+		    break;
+		    case "баш":
+				$html = file_get_html("https://bash.im/random");
+				$div = $html->find("div[class=quote__body]")[0];
+				$div = str_replace("<div class=\"quote__body\">", "", $div);
+				$div = str_replace("</div>", "", $div);
+				$this->vk->SendMessage(":: Ваша цитата:\n" . $div, $peer_id);
+		    break;
             case "сетроль":
                 $this->IsRoleOrDie($peer_id, $user_id, 2);
                 if(\count($f) < 3) {
                     $this->vk->SendMessage(":: Команда требует аргументов. Пиши \"!хелп\"", $peer_id);
-                    return;
-                }
-
-                if($this->u->GetRole($peer_id, $user_id) < 2) {
-                    $this->vk->SendMessage(":: У вас нет прав на использование этой команды", $peer_id);
                     return;
                 }
 
@@ -460,9 +465,8 @@ class Handlers {
                     break;
                 }
 
-                $this->u->SetRole($peer_id, $user_id, $r);
-
-            break;
+                $this->u->SetRole($peer_id, $dog, $r);
+				break;
         }
 
         if($action) {
@@ -550,3 +554,7 @@ class Handlers {
 }
 
 ?>
+
+
+
+
