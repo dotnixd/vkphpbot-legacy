@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class who extends CommandBase {
     public function Setup() { $this->SetOptions("кто <что-нибудь> - выберет случайного участика беседы", 0, true); }
 
     public function Run($who) {

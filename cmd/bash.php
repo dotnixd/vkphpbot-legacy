@@ -3,7 +3,7 @@
 require_once("module.php");
 require_once("incl/simple_html_dom.php");
 
-class Command extends CommandBase {
+class bash extends CommandBase {
     public function Setup() { $this->SetOptions("баш - цитата с bash.im", 0, false); }
 
     public function Run() {

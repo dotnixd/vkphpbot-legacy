@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class weather extends CommandBase {
     public function Setup() { $this->SetOptions("погода <город> - получить текущую погоду", 0, true); }
 
     public function Run($msg) {

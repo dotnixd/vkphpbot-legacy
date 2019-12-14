@@ -25,7 +25,9 @@ class GetModules {
             "калькулятор" => "calculator",
             "смех" => "laugh",
             "баш" => "bash",
-            "сетроль" => "setrole"
+            "сетроль" => "setrole",
+            "помощь" => "help",
+            "хелп" => "help"
         );
         return $m;
     }

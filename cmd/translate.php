@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class translate extends CommandBase {
     public function Setup() { $this->SetOptions("перевод <сообщение> - перевести русский текст на английский язык, если язык сообщения другой, то сообщение будет переведено на русский язык", 0, true); }
 
     public function Run($msg) {

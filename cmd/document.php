@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class document extends CommandBase {
     public function Setup() { $this->SetOptions("документ <название> - поиск документов ВК", 0, true); }
 
     public function Run($msg) {

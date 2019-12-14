@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class cum extends CommandBase {
     public function Setup() { $this->SetOptions("кончил - кончить на пикчу (нужно приложить пикчу)", 0, false); }
 
     public function Run() {

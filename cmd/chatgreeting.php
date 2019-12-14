@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class chatgreeting extends CommandBase {
     public function Setup() { $this->SetOptions("приветствие <сообщение> - установить приветствие", 1, true); }
 
     public function Run($msg) {

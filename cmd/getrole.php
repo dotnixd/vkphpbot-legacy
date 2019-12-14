@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class getrole extends CommandBase {
     public function Setup() { $this->SetOptions("роль - получить роль", 0, false); }
 
     public function Run() {

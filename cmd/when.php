@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class when extends CommandBase {
     public function Setup() { $this->SetOptions("когда <текст> - предугадать когда произойдет что-то", 0, true); }
 
     public function Run($msg) {

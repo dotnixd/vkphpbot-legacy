@@ -3,7 +3,7 @@
 require_once("module.php");
 require_once("incl/smeh.php");
 
-class Command extends CommandBase {
+class laugh extends CommandBase {
     public function Setup() { $this->SetOptions("смех - генератор смеха (для справки напишите \"!смех -h\")", 0, false); }
 
     public function Run($f) {

@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class push extends CommandBase {
     public function Setup() { $this->SetOptions("пуш <сообщение (опционально)> - позвать всех участников (модератор)", 1, false); }
 
     public function Run($f) {

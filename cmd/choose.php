@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class choose extends CommandBase {
     public function Setup() { $this->SetOptions("выбери <что-то> или <что-то> - выбрать случайное значение", 0, false); }
 
     public function Run($f) {

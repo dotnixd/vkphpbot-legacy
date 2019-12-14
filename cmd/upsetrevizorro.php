@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class upsetrevizorro extends CommandBase {
     public function Setup() { $this->SetOptions("огорчило - приклеить наклеку \"огорчило\" (нужно прикрепить пикчу)", 0, false); }
 
     public function Run() {

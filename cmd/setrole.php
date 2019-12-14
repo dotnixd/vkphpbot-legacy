@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class setrole extends CommandBase {
     public function Setup() { $this->SetOptions("сетроль <пользователь> <роль> - изменить роль пользователю (а/админ/админстратор, м/модер/модератор, что угодно - обычный участник)", 2, false); }
 
     public function Run($f) {

@@ -3,7 +3,7 @@
 require_once("module.php");
 require_once("incl/Field_calculate.php");
 
-class Command extends CommandBase {
+class calculator extends CommandBase {
     public function Setup() { $this->SetOptions("калькулятор (пример) - вычислить ответ примера", 0, true); }
 
     public function Run($msg) {

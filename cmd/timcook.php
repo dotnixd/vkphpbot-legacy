@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class timcook extends CommandBase {
     public function Setup() { $this->SetOptions("тимкук - пикча с презентации эппл (нужно прикрепить пикчу)", 0, false); }
 
     public function Run() {

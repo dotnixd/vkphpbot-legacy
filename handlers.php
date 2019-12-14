@@ -34,7 +34,7 @@ class Handlers {
         }
         if($file) {
             require_once("cmd/" . $file . ".php");
-            $runner = new Command($this->vk, $this->db, $data, $text, $peer_id, $user_id, $action);
+            $runner = new $file($this->vk, $this->db, $data, $text, $peer_id, $user_id, $action);
             $runner->Setup();
             $this->IsRoleOrDie($peer_id, $user_id, $runner->needRole);
 

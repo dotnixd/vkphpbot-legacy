@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class online extends CommandBase {
     public function Setup() { $this->SetOptions("онлайн - получить список участников которые в сети (модератор)", 1, false); }
 
     public function Run() {

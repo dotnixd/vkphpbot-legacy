@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class whatanime extends CommandBase {
     public function Setup() { $this->SetOptions("чтозааниме - найти аниме по пикче (нужно прикрепить пикчу)", 0, false); }
 
     public function Run() {

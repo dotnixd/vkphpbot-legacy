@@ -2,7 +2,7 @@
 
 require_once("module.php");
 
-class Command extends CommandBase {
+class probability extends CommandBase {
     public function Setup() { $this->SetOptions("вероятность <чего-нибудь> - сгенерировать случайную вероятность", 0, true); }
 
     public function Run($f) {
