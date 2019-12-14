@@ -13,7 +13,7 @@ class help extends CommandBase {
             require_once($class . ".php");
             $c = new $class(NULL, NULL, NULL, NULL, NULL, NULL, NULL);
             $c->Setup();
-            $commands .= ":: " . $command . " - " . $c->description . "\n";
+            $commands .= ":: " . $c->description . "\n";
         }
 
         $commands .= "\nРепозиторий на GitHub - https://github.com/OverPie/vkphpbot";

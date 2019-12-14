@@ -3,7 +3,7 @@
 require_once("module.php");
 
 class offline extends CommandBase {
-    public function Setup() { $this->SetOptions("!оффлайн - получить список участников которые не в сети (модератор)", 1, false); }
+    public function Setup() { $this->SetOptions("оффлайн - получить список участников которые не в сети (модератор)", 1, false); }
 
     public function Run() {
         $users = $this->vk->GetDialogMembers($this->peer_id);
