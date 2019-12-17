@@ -28,7 +28,8 @@ class GetModules {
             "сетроль" => "setrole",
             "помощь" => "help",
 			"хелп" => "help",
-			"кик" => "kick"
+			"кик" => "kick",
+			"админсостав" => "listad"
         );
         return $m;
     }
