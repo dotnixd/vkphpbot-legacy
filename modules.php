@@ -27,9 +27,9 @@ class GetModules {
             "баш" => "bash",
             "сетроль" => "setrole",
             "помощь" => "help",
-			"хелп" => "help",
-			"кик" => "kick",
-			"админсостав" => "listad"
+	    "хелп" => "help",
+	    "кик" => "kick",
+	    "админсостав" => "listad"
         );
         return $m;
     }
