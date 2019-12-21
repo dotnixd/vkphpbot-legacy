@@ -29,7 +29,8 @@ class GetModules {
             "помощь" => "help",
 	    "хелп" => "help",
 	    "кик" => "kick",
-	    "админсостав" => "listad"
+	    "админсостав" => "listad",
+	    "кр" => "qrcode"
         );
         return $m;
     }
