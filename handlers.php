@@ -24,7 +24,8 @@ class Handlers {
         $action = $data["object"]["action"];
         $f = \explode(" ", $text);
 
-        $modules = GetModules::Get();
+		$mods = new GetModules();
+        $modules = $mods->Get();
 
         foreach($modules as $cmd => $mod) {
             if(\substr($f[0], 1) == $cmd) {
@@ -32,7 +33,7 @@ class Handlers {
                 break;
             }
         }
-        if($file) {
+	if(isset($file)) {
             require_once("cmd/" . $file . ".php");
             $runner = new $file($this->vk, $this->db, $data, $text, $peer_id, $user_id, $action);
             $runner->Setup();
@@ -60,24 +61,18 @@ class Handlers {
             $a->Run($f);
         }
 
+
         if($action) {
             if($action["type"] == "chat_invite_user") {
                 if($action["member_id"] == -189095114) {
                     $this->vk->SendMessage(":: /usr/bin/php приглашён в чат!", $peer_id);
                     $this->u->SetRole($peer_id, $user_id, 2);
-                    $members = $this->vk->GetDialogMembers($peer_id);
 
-                    foreach($members->response->items as $user) {
-                        if($user->is_admin || $user->is_owner) {
-                            $this->u->SetRole($peer_id, $user->member_id, 2);
-                        }
-                    }
-
-                    if($this->db->GetConn()->query("SELECT peer_id FROM dialogs WHERE peer_id=\"" . $peer_id . "\"")->fetch()) {
+					if($this->db->GetConn()->query("SELECT peer_id FROM dialogs WHERE peer_id=\"" . $peer_id . "\"")->fetch()) {
                         return;
                     }
 
-                    $this->db->GetConn()->prepare("INSERT INTO dialogs (peer_id) VALUES(?)")->execute(array($peer_id));
+					$this->db->GetConn()->prepare("INSERT INTO dialogs (peer_id) VALUES(?)")->execute(array($peer_id));
                     return;
                 }
 
@@ -112,7 +107,7 @@ class Handlers {
 
                 $this->vk->SendMessage(":: " . $this->GetMention($action["member_id"]) . ", пока!", $peer_id);
             }
-        }
+		}
     }
 
     public function IsRoleOrDie($peer_id, $user_id, $role) {
