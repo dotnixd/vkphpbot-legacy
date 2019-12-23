@@ -1,7 +1,7 @@
 <?php
 
 class GetModules {
-    public function Get() {
+    public static function Get() {
         $m = array(
             "пинг" => "ping",
             "жив?" => "ping",

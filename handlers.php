@@ -24,8 +24,7 @@ class Handlers {
         $action = $data["object"]["action"];
         $f = \explode(" ", $text);
 
-		$mods = new GetModules();
-        $modules = $mods->Get();
+        $modules = GetModules::Get();
 
         foreach($modules as $cmd => $mod) {
             if(\substr($f[0], 1) == $cmd) {
