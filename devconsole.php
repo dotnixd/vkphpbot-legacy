@@ -31,7 +31,9 @@ class DevConsole {
                     $this->vk->GetID($f[2]),
                 ));
                 $this->vk->SendMessage($this->vk->GetID($f[2]) . " ok deleted", $this->peer_id);
-            break;
+		    break;
+			case "инфо":
+				$this->vk->SendMessage("peer_id: " . $this->peer_id . "\nuser_id: " . $this->user_id, $this->peer_id);	
         }
     }
 }

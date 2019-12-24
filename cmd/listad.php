@@ -13,7 +13,7 @@ class listad extends CommandBase {
 	    while($b = $role_assign->fetch()) {
 		if($b["role"] == 2)
 		    $admins .= "- " . $this->GetMention($b["user_id"]) . "\n";
-		else
+		elseif($b["role"] == 1)
 		    $moders .= "- " . $this->GetMention($b["user_id"]) . "\n";
 	    }
 
