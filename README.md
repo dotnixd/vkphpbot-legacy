@@ -15,3 +15,13 @@ $dbname="имя бд";
 $admins=array("overpie", "собственно админы для доступа к консоли");
 ?>
 ```
+
+Затем, запустите скрипт prepare\_db.php для инициализации MySQL
+
+Также, нужно установить библиотеки PHP:
+```
+php-pdo-mysql
+php-gd
+php-json
+php-curl
+```
